@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2019-4-4 10:46:32 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.hx.entities.Teacher" table="TEACHER">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="name" type="java.lang.String">
+            <column name="NAME" />
+        </property>
+        <set name="students" table="TEACHER_STUDENT" inverse="false" lazy="true"
+        cascade="delete-orphan">
+            <key>
+                <column name="T_ID" />
+            </key>
+            <many-to-many class="com.hx.entities.Student" column="S_ID"/>
+        </set>
+    </class>
+</hibernate-mapping>
