@@ -1,0 +1,93 @@
+package com.hx.test;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.hx.entities.Student;
+import com.hx.entities.Teacher;
+import com.hx.statictools.HibernateUtils;
+
+class ManyToManyTest {
+	
+	Session session = null;
+	Transaction transaction = null;
+	
+	@Before
+	void beginTest() {
+		session = HibernateUtils.getCurrentSession();
+		transaction = session.beginTransaction();
+	}
+
+	@Test
+	void testSave() {
+		Teacher t1 = new Teacher(null, "tea-1");
+		Teacher t2 = new Teacher(null, "tea-2");
+		
+		Student s1 = new Student(null, "s-1");
+		Student s2 = new Student(null, "s-2");
+		
+		t1.getStudents().add(s1);
+		t1.getStudents().add(s2);
+		t2.getStudents().add(s1);
+		t2.getStudents().add(s2);
+		
+		session.save(t1);
+		session.save(t2);
+		
+		session.save(s1);
+		session.save(s2);
+	}
+	
+	@Test
+	void testSave2() {
+		Teacher t = new Teacher(null, "tea-3");
+		Student s = (Student) session.get(Student.class, 1);
+		
+		t.getStudents().add(s);
+		
+		session.save(t);
+		session.save(s);
+	}
+	
+	@Test
+	void testGet() {
+		Teacher t = (Teacher) session.get(Teacher.class, 1);
+		System.out.println(t.getName());
+		Set<Student> students = t.getStudents();
+		for(Student s:students) {
+			System.out.println(s);
+		}
+	}
+	
+	@Test
+	void testuodate() {
+		Teacher t = (Teacher) session.get(Teacher.class, 1);
+		Set<Student> students = t.getStudents();
+		Student student = students.iterator().next();
+		student.setName("ss-1");
+		session.update(t);
+		System.out.println(student);
+	}
+
+	@Test
+	void testDelete() {
+		Teacher t = (Teacher) session.get(Teacher.class, 1);
+		Iterator students = t.getStudents().iterator();
+		while(students.hasNext()) {
+			Student s = (Student) students.next();
+			s.getTeachers().remove(t);
+		}
+		session.delete(t);
+	}
+	
+	@After
+	void after() {
+		transaction.commit();
+	}
+}
