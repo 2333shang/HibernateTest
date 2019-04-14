@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2019-4-14 16:24:11 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="com.hx.hibernate.entities.Employee" table="EMPLOYEE">
+        <id name="eid" type="java.lang.Integer">
+            <column name="EID" />
+            <generator class="native" />
+        </id>
+        <property name="ename" type="java.lang.String">
+            <column name="ENAME" />
+        </property>
+        <property name="job" type="java.lang.String">
+            <column name="JOB" />
+        </property>
+        <property name="hiredDate" type="java.util.Date">
+            <column name="HIREDDATE"/>
+        </property>
+        <property name="salary" type="java.lang.Double">
+            <column name="SALARY" />
+        </property>
+        <many-to-one name="department" class="com.hx.hibernate.entities.Department">
+            <column name="DEPTID" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>
